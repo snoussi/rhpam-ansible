@@ -1,0 +1,13 @@
+---
+- name: Check existence of EAP patch
+  stat:
+    path: "{{ jboss_eap_home + '/.installation/patches/' }}"
+  register: jboss_eap_patch_exists
+  when: jboss_eap_patch_package_name is defined
+
+- name: Apply JBoss EAP Patch
+  command: "{{ jboss_eap_home }}/bin/jboss-cli.sh {{ '--command=' ~ cmd | quote }}"
+  vars:
+    cmd: >-
+      patch apply {{jboss_eap_tmp_dest}}/{{jboss_eap_patch_package_name}} --override-all
+  when: jboss_eap_patch_package_name is defined and not jboss_eap_patch_exists.stat.exists | bool

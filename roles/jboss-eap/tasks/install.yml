@@ -1,0 +1,11 @@
+---
+- name: Check existence of EAP
+  stat:
+    path: "{{ jboss_eap_home + '/version.txt' }}"
+  register: jboss_eap_exists
+
+- name: Extract JBoss EAP into {{ jboss_eap_root }}
+  unarchive:
+    src: "{{ jboss_eap_tmp_dest }}/{{ jboss_eap_package_name }}"
+    dest: "{{ jboss_eap_root }}"
+  when: not jboss_eap_exists.stat.exists | bool

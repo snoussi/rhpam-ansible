@@ -1,0 +1,7 @@
+embed-server --server-config=standalone-full.xml
+
+    if (outcome != "success") of /system-property=kie.maven.settings.custom:read-resource
+        /system-property=kie.maven.settings.custom:add(value="{{ kie_maven_settings_custom }}")
+    end-if
+
+stop-embedded-server

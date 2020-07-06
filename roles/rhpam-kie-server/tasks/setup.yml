@@ -1,0 +1,32 @@
+---
+- name: Create {{ rhpam_kie_server_data }} directory
+  file:
+    path: "{{ rhpam_kie_server_data }}"
+    state: directory
+
+- name: Add kieserver user {{ rhpam_kie_server_admin_usr }}
+  command: "{{ rhpam_kie_server_home }}/bin/add-user.sh -a --user {{ rhpam_kie_server_admin_usr }} --password {{ rhpam_kie_server_admin_pwd }} --role kie-server,rest-all"
+
+# Custom maven config
+- name: Create {{ kie_maven_settings_custom }}
+  template:
+    src: settings.xml.j2
+    dest: "{{ kie_maven_settings_custom }}"
+    force: yes
+
+- name: Create ks-setup-maven-props.cli
+  template:
+    src: setup-maven-props.cli.j2
+    dest: "{{ rhpam_kie_server_tmp_dest }}/ks-setup-maven-props.cli"
+
+- name: Run ks-setup-maven-props.cli JBoss configuration
+  command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh --file={{ rhpam_kie_server_tmp_dest }}/ks-setup-maven-props.cli"
+
+# Create Kie Server basic config
+- name: Create ks-setup-basic-props.cli
+  template:
+    src: setup-basic-props.cli.j2
+    dest: "{{ rhpam_kie_server_tmp_dest }}/ks-setup-basic-props.cli"
+
+- name: Run setup-basic-props.cli JBoss configuration
+  command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh --file={{ rhpam_kie_server_tmp_dest }}/ks-setup-basic-props.cli"

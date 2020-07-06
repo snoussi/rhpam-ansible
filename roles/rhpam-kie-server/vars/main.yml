@@ -1,0 +1,2 @@
+kie_maven_settings_custom: "{{ rhpam_kie_server_data }}/settings.xml"
+org_kie_server_repo: "{{ rhpam_kie_server_data }}"

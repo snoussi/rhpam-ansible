@@ -1,0 +1,14 @@
+---
+- name: Create JBoss EAP scripts {{ jboss_eap_home }}/scripts
+  file:
+    path: "{{ jboss_eap_home }}/scripts"
+    state: directory
+
+- name: Create script change-log-level.sh
+  template:
+    src: change-log-level.sh.j2
+    dest: "{{ jboss_eap_home }}/scripts/change-log-level.sh"
+    mode: +x
+
+- name: Add a default admin user on EAP
+  command: "{{ jboss_eap_home }}/bin/add-user.sh -u {{eap_admin_user}} -p {{eap_admin_pwd}} -g 'admin' --silent"

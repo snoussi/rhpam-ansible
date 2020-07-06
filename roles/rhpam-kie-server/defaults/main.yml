@@ -1,0 +1,23 @@
+---
+rhpam_kie_server_install_eap: true
+
+rhpam_kie_server_tmp_dest: "{{ ansible_user_dir }}/tmp/rhpam"
+rhpam_kie_server_root: "{{ ansible_user_dir }}"
+rhpam_kie_server_home: "{{ rhpam_kie_server_root }}/{{rhpam_kie_server}}"
+rhpam_kie_server_data: "{{ rhpam_kie_server_home }}/data"
+
+rhpam_kie_server_admin_usr: kieServer
+rhpam_kie_server_admin_pwd: kieServer
+
+rhpam_kie_server_maven_redhat_ga_repo_url: https://maven.repository.redhat.com/ga/
+
+rhpam_kie_server_maven_central_repo_url: https://repo.maven.apache.org/maven2/
+
+org_kie_server_id: default-kieserver
+org_kie_server_mode: development
+org_kie_server_http_port: 8080
+org_kie_server_https_port: 8443
+org_kie_server_location: "http://{{ inventory_hostname }}:{{ org_kie_server_http_port }}/kie-server/services/rest/server"
+
+org_kie_server_mgmt_api_disabled: "false"
+org_kie_server_startup_strategy: "ControllerBasedStartupStrategy"

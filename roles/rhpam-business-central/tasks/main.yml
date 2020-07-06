@@ -1,0 +1,16 @@
+---
+- import_tasks: download.yml
+
+- import_tasks: install.yml
+
+- import_tasks: setup.yml
+
+- import_tasks: users.yml
+
+- debug:
+    msg:
+      - "RHPAM Business Central Installation dir: {{ rhpam_business_central_home }}"
+      - "Start server by running this command: ./bin/standalone.sh -c standalone-full.xml"
+      - "Business Central URL: http://{{ inventory_hostname }}:{{jboss_http_port_number}}/business-Central/"
+      - "Admin User username: {{ rhpam_business_central_admin_usr }}"
+      - "Admin User password: {{ rhpam_business_central_admin_pwd }}"

@@ -1,0 +1,16 @@
+---
+rhpam_business_central_install_eap: true
+
+rhpam_business_central_tmp_dest: "{{ ansible_user_dir }}/tmp/rhpam"
+rhpam_business_central_root: "{{ ansible_user_dir }}"
+rhpam_business_central_home: "{{ rhpam_business_central_root }}/{{rhpam_business_central}}"
+rhpam_business_central_data: "{{ rhpam_business_central_home }}/data"
+
+rhpam_business_central_admin_usr: pamAdmin
+rhpam_business_central_admin_pwd: pamAdmin
+rhpam_controller_usr: controllerUsr
+rhpam_controller_pwd: controllerUsr
+
+rhpam_business_central_maven_redhat_ga_repo_url: https://maven.repository.redhat.com/ga/
+
+rhpam_business_central_maven_central_repo_url: https://repo.maven.apache.org/maven2/

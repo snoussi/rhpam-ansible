@@ -1,0 +1,8 @@
+---
+- name: Create setup.cli
+  template:
+    src: setup.cli.j2
+    dest: "{{ jboss_eap_tmp_dest }}/setup.cli"
+
+- name: Run setup.cli JBoss configuration
+  command: "{{ jboss_eap_home }}/bin/jboss-cli.sh --file={{ jboss_eap_tmp_dest }}/setup.cli"

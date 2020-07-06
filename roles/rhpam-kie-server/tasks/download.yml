@@ -1,0 +1,14 @@
+---
+- name: Create {{ rhpam_kie_server_tmp_dest }} installation directory
+  file:
+    path: "{{ rhpam_kie_server_tmp_dest }}"
+    state: directory
+
+- name: Downloading RHPAM Business Central into {{rhpam_kie_server_tmp_dest}} from Red Hat Customer Portal, please wait ...
+  redhat_csp_download:
+    url: "{{rhpam_kie_server_package_source}}"
+    dest: "{{rhpam_kie_server_tmp_dest}}/{{rhpam_kie_server_package_name}}"
+    username: "{{rhn_username}}"
+    password: "{{rhn_password}}"
+  vars:
+    ansible_python_interpreter: "{{ansible_python_interpreter_path}}"

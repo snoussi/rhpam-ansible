@@ -1,0 +1,13 @@
+---
+jboss_eap_tmp_dest: "{{ ansible_user_dir }}/tmp/jboss-eap"
+jboss_eap_root: "{{ ansible_user_dir }}"
+jboss_eap_home: "{{ jboss_eap_root }}/{{ jboss_eap }}"
+
+eap_admin_user: admin
+eap_admin_pwd: admin
+
+# JBoss EAP host/port assignments
+jboss_bind_address_number: 127.0.0.1
+jboss_http_port_number: 8080
+jboss_https_port_number: 8443
+jboss_socket_binding_port_offset_number: 0

@@ -1,0 +1,26 @@
+---
+- name: Extract Kie Server into {{ rhpam_kie_server_tmp_dest }}
+  unarchive:
+    src: "{{ rhpam_kie_server_tmp_dest }}/{{ rhpam_kie_server_package_name }}"
+    dest: "{{ rhpam_kie_server_tmp_dest }}"
+    remote_src: yes
+- name: Copy SecurityPolicy to {{ rhpam_kie_server_home }}/bin/
+  command:
+    cmd: "cp -rf {{ rhpam_kie_server_tmp_dest }}/SecurityPolicy/. {{ rhpam_kie_server_home }}/bin/"
+    creates: "{{ rhpam_kie_server_home }}/bin/security.policy"
+
+- name: Copy kie-server.war to {{ rhpam_kie_server_home }}/standalone/deployments/
+  command:
+    cmd: "cp -rf {{ rhpam_kie_server_tmp_dest }}/kie-server.war {{ rhpam_kie_server_home }}/standalone/deployments/"
+    creates: "{{ rhpam_kie_server_home }}/standalone/deployments/kie-server.war"
+
+- name: Check if kie-server.war.deployed exists
+  stat:
+    path: "{{ rhpam_kie_server_home }}/standalone/deployments/kie-server.war.deployed"
+  register: kieserver_deployed
+
+- name: Create kie-server.war.dodeploy
+  file:
+    path: "{{ rhpam_kie_server_home }}/standalone/deployments/kie-server.war.dodeploy"
+    state: touch
+  when: not kieserver_deployed.stat.exists

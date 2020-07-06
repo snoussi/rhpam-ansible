@@ -1,0 +1,6 @@
+---
+allow_duplicates: true
+
+dependencies:
+  - role: environment
+  - role: sabre1041.redhat-csp-download

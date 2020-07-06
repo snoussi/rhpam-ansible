@@ -1,0 +1,117 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <!-- <proxies>
+    <proxy>
+      <id>example-proxy</id>
+      <active>true</active>
+      <protocol>http</protocol> OR <protocol>https</protocol>
+      <host>proxyHost</host>
+      <port>3128</port>
+      <username>username</username>
+      <password>password</password>
+    </proxy>
+  </proxies> -->
+
+  <servers></servers>
+
+  <!-- Configure a mirrors for offline env -->
+  <mirrors>
+    {% if rhpam_kie_server_maven_mirror_central_repo_url is defined %}
+    <mirror>
+      <id>central-mirror</id>
+      <name>Maven Central Mirror</name>
+      <url>{{ rhpam_kie_server_maven_mirror_central_repo_url }}</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+    {% endif %}
+  </mirrors>
+
+  <profiles>
+
+    <!-- Configure the Red Hat GA Maven repository -->
+    <profile>
+      <id>redhat-ga-repository</id>
+      <repositories>
+        <repository>
+          <id>redhat-ga</id>
+          <url>{{ rhpam_kie_server_maven_redhat_ga_repo_url }}</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>redhat-ga</id>
+          <url>{{ rhpam_kie_server_maven_redhat_ga_repo_url }}</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+
+
+    <!-- Configure the Maven Central repository -->
+    <profile>
+        <id>maven2central</id>
+        <repositories>
+            <repository>
+                <id>central</id>
+                <url>{{ rhpam_kie_server_maven_central_repo_url }}</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+            </repository>
+        </repositories>
+        <pluginRepositories>
+            <pluginRepository>
+                <id>central</id>
+                <url>{{ rhpam_kie_server_maven_central_repo_url }}</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+            </pluginRepository>
+        </pluginRepositories>
+    </profile>
+
+
+    <!-- Configure a local Maven repository -->
+    <profile>
+      <id>local-repository</id>
+      <repositories>
+        <repository>
+          <id>local-repository</id>
+          <url>{{ rhpam_kie_server_maven_local_repo_url | default('empty') }}</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>redhat-ga-repository</activeProfile>
+    <activeProfile>maven2central</activeProfile>
+    {% if rhpam_kie_server_maven_local_repo_url is defined %}
+    <activeProfile>local-repository</activeProfile>
+    {% endif %}
+  </activeProfiles>
+
+</settings>

@@ -1,0 +1,19 @@
+---
+- name: Check existence of {{jboss_eap_home}}
+  stat: path={{jboss_eap_home}}
+  register: jboss_eap_home_exists
+
+- name: Check existence of Business Central
+  stat:
+    path: "{{ rhpam_business_central_home + '/standalone/deployments/business-central.war' }}"
+  register: rhpam_business_central_exists
+
+- name: Extract RHPAM Business Central into {{ jboss_eap_home }}
+  unarchive:
+    src: "{{ rhpam_business_central_tmp_dest }}/{{ rhpam_business_central_package_name }}"
+    dest: "{{ rhpam_business_central_root }}"
+  when: jboss_eap_home_exists.stat.exists and not rhpam_business_central_exists.stat.exists | bool
+
+- name: Rename {{jboss_eap_home}} to {{rhpam_business_central_home}}
+  command: mv {{jboss_eap_home}} {{rhpam_business_central_home}}
+  when: jboss_eap_home_exists.stat.exists

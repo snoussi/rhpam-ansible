@@ -1,0 +1,39 @@
+---
+- name: Create {{ jboss_eap_tmp_dest }} installation directory
+  file:
+    path: "{{ jboss_eap_tmp_dest }}"
+    state: directory
+
+- name: Fail for Missing Red Hat Customer Portal Username
+  fail: msg="This role requires rhn_username to be set and non empty."
+  when: (rhn_username is not defined or rhn_username == '')
+
+- name: Fail for Missing Red Hat Customer Portal Password
+  fail: msg="This role requires rhn_password to be set and non empty."
+  when: (rhn_password is not defined or rhn_password == '')
+
+- name: Install redhat_csp_download required python package.
+  pip:
+    name:
+      - requests
+      - lxml
+    state: present
+
+- name: Downloading JBoss EAP into {{jboss_eap_tmp_dest}} from Red Hat Customer Portal ...
+  redhat_csp_download:
+    url: "{{jboss_eap_package_source}}"
+    dest: "{{jboss_eap_tmp_dest}}/{{jboss_eap_package_name}}"
+    username: "{{rhn_username}}"
+    password: "{{rhn_password}}"
+  vars:
+    ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
+
+- name: Downloading JBoss EAP patch into {{jboss_eap_tmp_dest}} from Red Hat Customer Portal ...
+  redhat_csp_download:
+    url: "{{jboss_eap_patch_package_source}}"
+    dest: "{{jboss_eap_tmp_dest}}/{{jboss_eap_patch_package_name}}"
+    username: "{{rhn_username}}"
+    password: "{{rhn_password}}"
+  vars:
+    ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
+  when: jboss_eap_patch_package_name is defined

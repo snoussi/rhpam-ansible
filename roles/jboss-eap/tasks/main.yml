@@ -1,0 +1,17 @@
+---
+- import_tasks: download.yml
+
+- import_tasks: install.yml
+
+- import_tasks: patch.yml
+
+- import_tasks: setup.yml
+
+- import_tasks: scripts.yml
+
+- debug:
+    msg:
+      - "EAP Installation dir: {{ jboss_eap_home }}"
+      - "EAP Admin Console URL: http://{{ inventory_hostname }}:9990"
+      - "Admin User username: {{ eap_admin_user }}"
+      - "Admin User password: {{ eap_admin_pwd }}"

@@ -1,0 +1,32 @@
+---
+# 1. RHPAM Sandbox (Business Central and Kie Server on the same host with a managed Kie Server runtime mode ).
+- name: Provision a RHPAM Sandbox - Managed Kie Server runtime mode
+  hosts: sandbox
+  vars_prompt:
+    - name: rhn_username
+      prompt: "Enter your access.redhat.com username ?"
+      private: no
+    - name: rhn_password
+      prompt: "Enter your access.redhat.com password ?"
+  tasks:
+    - include_role:
+        name: rhpam-business-central
+      vars:
+        rhpam_business_central_home: "{{ ansible_user_dir }}/{{rhpam_business_central}}"
+        rhpam_business_central_install_eap: true
+        rhpam_controller_usr: controllerUsr
+        rhpam_controller_pwd: controllerUsr
+    - include_role:
+        name: rhpam-kie-server
+      vars:
+        rhpam_kie_server_home: "{{ ansible_user_dir }}/{{rhpam_kie_server}}"
+        rhpam_kie_server_install_eap: false
+        org_kie_server_mode: development
+        org_kie_server_startup_strategy: "ControllerBasedStartupStrategy"
+        org_kie_server_controller: ws://localhost:8080/business-central/websocket/controller
+        org_kie_server_controller_user: controllerUsr
+        org_kie_server_controller_pwd: controllerUsr
+  post_tasks:
+    - debug:
+        msg:
+          - "RHPAM Sandbox installation done!"

@@ -1,0 +1,8 @@
+---
+dependencies:
+  - role: jboss-eap
+    vars:
+      jboss_eap_root: "{{ rhpam_business_central_root }}"
+    when: rhpam_business_central_install_eap
+    tags:
+      - eap

@@ -1,0 +1,43 @@
+---
+- name: Create {{ rhpam_business_central_data }} directory
+  file:
+    path: "{{ rhpam_business_central_data }}"
+    state: directory
+
+# Business Central basic config
+- name: Create setup-basic-props.cli
+  template:
+    src: setup-basic-props.cli.j2
+    dest: "{{ rhpam_business_central_tmp_dest }}/setup-basic-props.cli"
+
+- name: Run setup-basic-props.cli JBoss configuration
+  command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh --file={{ rhpam_business_central_tmp_dest }}/setup-basic-props.cli"
+
+# Custom maven config
+- name: Create {{ kie_maven_settings_custom }}
+  template:
+    src: settings.xml.j2
+    dest: "{{ kie_maven_settings_custom }}"
+
+- name: Create bc-setup-maven-props.cli
+  template:
+    src: setup-maven-props.cli.j2
+    dest: "{{ rhpam_business_central_tmp_dest }}/bc-setup-maven-props.cli"
+
+- name: Run bc-setup-maven-props.cli JBoss configuration
+  command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh --file={{ rhpam_business_central_tmp_dest }}/bc-setup-maven-props.cli"
+
+# SSH keys necessary to git clone (import projects) and push via SSH.
+- name: Generate SSH key pair {{ rhpam_business_central_ssh_key }}
+  openssh_keypair:
+    path: "{{ rhpam_business_central_ssh_key }}"
+  register: openssh_keypair
+
+- name: Upload SSH public key to github.com
+  github_key:
+    name: rhpam-business-central
+    token: "{{ github_access_token }}"
+    pubkey: "{{ openssh_keypair.public_key }}"
+  delegate_to: localhost
+  when: github_access_token is defined
+# Git hook required steps below, knows_hosts needed for the 'git push'.

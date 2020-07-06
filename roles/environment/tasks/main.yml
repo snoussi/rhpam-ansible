@@ -1,0 +1,25 @@
+---
+- name: Install software packages on CentOS/RHEL
+  yum:
+    name:
+      - java-1.8.0-openjdk-devel
+      - unzip
+      - git
+    state: present
+  become: yes
+  when: ansible_os_family == "RedHat"
+  tags:
+    - os_env
+
+- name: Install software packages on MacOSX
+  homebrew:
+    name:
+      - openjdk
+      - unzip
+      - git
+    state: present
+  become: yes
+  become_user: "{{ ansible_user_id }}"
+  when: ansible_facts['distribution'] == "MacOSX"
+  tags:
+    - os_env

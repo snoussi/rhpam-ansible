@@ -1,0 +1,21 @@
+---
+- import_tasks: download.yml
+
+- import_tasks: install.yml
+
+- import_tasks: setup.yml
+
+- import_tasks: setup-managed.yml
+  when: org_kie_server_controller is defined
+
+- import_tasks: setup-kie-containers.yml
+  when: org_kie_server_controller is not defined
+  tags: kie-containers
+
+- debug:
+    msg:
+      - "RHPAM Kie Server Installation dir: {{ rhpam_kie_server_home }}"
+      - "Start server by running this command: ./bin/standalone.sh -c standalone-full.xml"
+      - "Kie Server Swagger URL: http://{{ inventory_hostname }}:{{jboss_http_port_number}}/kie-server/docs/"
+      - "Admin User username: {{ rhpam_kie_server_admin_usr }}"
+      - "Admin User password: {{ rhpam_kie_server_admin_pwd }}"
