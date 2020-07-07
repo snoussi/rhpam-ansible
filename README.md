@@ -4,7 +4,7 @@ A playbook to install Red Hat Process Automation Manager Installation and config
 
 ## Prerequisites
 
-- A MacOSX or Red Hat (rhel, centos, Fedora ...) type hosts
+- A MacOSX or Red Hat (RHEL, CentOs, Fedora ...) type hosts
 - An account at access.redhat.com
 - Check out the variables in [all.yml](all.yml) for package versions.
 - Assign hosts to the right group in the [hosts](hosts) inventory file.
@@ -25,3 +25,4 @@ ansible-playbook -i hosts pam-sandbox.yml
 
 - [Ansible JBoss BxMS Role](https://github.com/redhat-cop/jboss_bxms)
 - [Red Hat Process Automation Manager Ansible Installation](https://github.com/juliaaano/rhpam-eap-ansible)
+- [Victor da Costa](https://github.com/victorock)
