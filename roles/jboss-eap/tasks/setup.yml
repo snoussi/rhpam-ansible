@@ -6,3 +6,14 @@
 
 - name: Run setup.cli JBoss configuration
   command: "{{ jboss_eap_home }}/bin/jboss-cli.sh --file={{ jboss_eap_tmp_dest }}/setup.cli"
+
+- name: Create JBoss EAP scripts {{ jboss_eap_home }}/scripts
+  file:
+    path: "{{ jboss_eap_home }}/scripts"
+    state: directory
+
+- name: Create script change-log-level.sh
+  template:
+    src: change-log-level.sh.j2
+    dest: "{{ jboss_eap_home }}/scripts/change-log-level.sh"
+    mode: +x

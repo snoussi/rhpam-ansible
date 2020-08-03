@@ -11,6 +11,27 @@ rhpam_business_central_admin_pwd: pamAdmin
 rhpam_controller_usr: controllerUsr
 rhpam_controller_pwd: controllerUsr
 
-rhpam_business_central_maven_redhat_ga_repo_url: https://maven.repository.redhat.com/ga/
+org_kie_example: "true"
+org_jbpm_designer_perspective: "full"
+designerdataobjects: "false"
+org_kie_workbench_profile: "FORCE_FULL"
+org_jbpm_server_ext_disabled: "false"
+org_jbpm_ui_server_ext_disabled: "false"
 
+rhpam_business_central_ssh_key: "{{ ansible_user_dir }}/.ssh/rhpam_rsa"
+org_uberfire_nio_git_dir: "{{ rhpam_business_central_data }}"
+org_uberfire_metadata_index_dir: "{{ rhpam_business_central_data }}"
+org_uberfire_nio_git_ssh_cert_dir: "{{ rhpam_business_central_data }}"
+
+# org_uberfire_nio_git_hooks: "{{ rhpam_business_central_data }}/git-hooks"
+# appformer_git_hooks_bundle: "{{ rhpam_business_central_data }}/git-hook-messages.properties"
+
+rhpam_business_central_maven_redhat_ga_repo_url: https://maven.repository.redhat.com/ga/
 rhpam_business_central_maven_central_repo_url: https://repo.maven.apache.org/maven2/
+org_guvnor_m2repo_dir: "{{ rhpam_business_central_data }}/repositories/kie"
+kie_maven_settings_custom: "{{ rhpam_business_central_data }}/settings.xml"
+
+rhpam_business_central_sso_authServer_url: http://localhost:8180/auth
+org_jbpm_workbench_kie_server_keycloak: "true"
+org_uberfire_ext_security_management_api_userManagementServices: "KCAdapterUserManagementService"
+org_uberfire_ext_security_management_keycloak_authServer: "{{ rhpam_business_central_sso_authServer_url }}"

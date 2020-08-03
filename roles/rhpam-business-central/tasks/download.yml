@@ -10,5 +10,15 @@
     dest: "{{rhpam_business_central_tmp_dest}}/{{rhpam_business_central_package_name}}"
     username: "{{rhn_username}}"
     password: "{{rhn_password}}"
+  async: 7200
+  poll: 0
+  register: csp_pam_bc_download
   vars:
     ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
+
+- name: Check On RHPAM Business Central download completion ...
+  async_status: jid={{ csp_pam_bc_download.ansible_job_id }}
+  register: job_result_csp_pam_bc_download
+  until: job_result_csp_pam_bc_download.finished
+  retries: 600
+  delay: 10

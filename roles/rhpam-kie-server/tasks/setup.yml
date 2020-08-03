@@ -30,3 +30,64 @@
 
 - name: Run setup-basic-props.cli JBoss configuration
   command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh --file={{ rhpam_kie_server_tmp_dest }}/ks-setup-basic-props.cli"
+
+# Setup managed mode
+- name: Create setup-managed.cli
+  template:
+    src: setup-managed.cli.j2
+    dest: "{{ rhpam_kie_server_tmp_dest }}/setup-managed.cli"
+  when: org_kie_server_controller is defined
+
+- name: Run setup-managed.cli JBoss configuration
+  command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh --file={{ rhpam_kie_server_tmp_dest }}/setup-managed.cli"
+  when: org_kie_server_controller is defined
+
+# Setup unmanged mode
+- name: Create {{ org_kie_server_id }}.xml state file
+  template:
+    src: kieserver.xml.j2
+    dest: "{{ org_kie_server_repo }}/{{ org_kie_server_id }}.xml"
+  when: rhpam_kie_server_kie_containers is defined and org_kie_server_controller is not defined | bool
+
+# Add & configure Red Hat Single Sign-On OIDC Adapter
+- name: Downloading Red Hat Single Sign-On Client Adapter for JBoss EAP 7 into {{rhpam_kie_server_tmp_dest}} from Red Hat Customer Portal, please wait ...
+  redhat_csp_download:
+    url: "{{redhat_sso_oidc_eap_adapter_package_source}}"
+    dest: "{{rhpam_kie_server_tmp_dest}}/{{redhat_sso_oidc_eap_adapter_package_name}}"
+    username: "{{rhn_username}}"
+    password: "{{rhn_password}}"
+  vars:
+    ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Extract Red Hat Single Sign-On Client Adapter for JBoss EAP 7 into {{ rhpam_kie_server_home }}
+  unarchive:
+    src: "{{ rhpam_kie_server_tmp_dest }}/{{redhat_sso_oidc_eap_adapter_package_name}}"
+    dest: "{{ rhpam_kie_server_home }}"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Configure Red Hat Single Sign-On Client Adapter for JBoss EAP 7
+  command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh -Dserver.config=standalone-full.xml --file={{ rhpam_kie_server_home }}/bin/adapter-elytron-install-offline.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+  tags:
+    - sso
+
+- name: Create ks-setup-sso-props.cli
+  template:
+    src: setup-sso-props.cli.j2
+    dest: "{{ rhpam_kie_server_tmp_dest }}/ks-setup-sso-props.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Run ks-setup-sso-props.cli to add Kie Server rh-sso configuration
+  command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh --file={{ rhpam_kie_server_tmp_dest }}/ks-setup-sso-props.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Create ks-setup-sso-client.cli
+  template:
+    src: setup-sso-client.cli.j2
+    dest: "{{ rhpam_kie_server_tmp_dest }}/ks-setup-sso-client.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Run ks-setup-sso-client.cli to add rh-sso client configuration
+  command: "{{ rhpam_kie_server_home }}/bin/jboss-cli.sh --file={{ rhpam_kie_server_tmp_dest }}/ks-setup-sso-client.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined

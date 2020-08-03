@@ -21,3 +21,9 @@ org_kie_server_location: "http://{{ inventory_hostname }}:{{ org_kie_server_http
 
 org_kie_server_mgmt_api_disabled: "false"
 org_kie_server_startup_strategy: "ControllerBasedStartupStrategy"
+
+kie_maven_settings_custom: "{{ rhpam_kie_server_data }}/settings.xml"
+org_kie_server_repo: "{{ rhpam_kie_server_data }}"
+
+org_kie_server_sync_deploy: "false"
+rhpam_kie_server_sso_authServer_url: http://localhost:8180/auth

@@ -1,16 +1,28 @@
-jboss_eap_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=64311
-jboss_eap_package_name: jboss-eap-7.2.0.zip
-jboss_eap_patch_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=81821
-jboss_eap_patch_package_name: jboss-eap-7.2.8-patch.zip
-jboss_eap: jboss-eap-7.2
+jboss_eap_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=80101
+jboss_eap_package_name: jboss-eap-7.3.0.zip
+jboss_eap_patch_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=83141
+jboss_eap_patch_package_name: jboss-eap-7.3.1-patch.zip
+jboss_eap: jboss-eap-7.3
 
-rhpam_business_central_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=82441
-rhpam_business_central_package_name: rhpam-7.7.1-business-central-eap7-deployable.zip
-rhpam_business_central: rhpam-7.7.1
+rhpam_business_central_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=85631
+rhpam_business_central_package_name: rhpam-7.8.0-business-central-eap7-deployable.zip
+rhpam_business_central: rhpam-7.8.0
 
-rhpam_kie_server_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=82451
-rhpam_kie_server_package_name: rhpam-7.7.1-kie-server-ee8.zip
-rhpam_kie_server: rhpam-7.7.1
+rhpam_kie_server_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=85641
+rhpam_kie_server_package_name: rhpam-7.8.0-kie-server-ee8.zip
+rhpam_kie_server: rhpam-7.8.0
 
+redhat_sso_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=64611
+redhat_sso_package_name: rh-sso-7.3.0.GA.zip
+redhat_sso_patch_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=82061
+redhat_sso_patch_package_name: rh-sso-7.3.8-patch.zip
+redhat_sso: rh-sso-7.3
+
+redhat_sso_oidc_eap_adapter_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=82041
+redhat_sso_oidc_eap_adapter_package_name: rh-sso-7.3.8-eap7-adapter.zip
+redhat_sso_saml_eap_adapter_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=81991
+redhat_sso_saml_eap_adapter_package_name: rh-sso-7.3.8-saml-eap7-adapter.zip
+
+ansible_python_interpreter: /usr/local/bin/python3
 ansible_python_interpreter_path: /usr/local/bin/python3
 # github_access_token:

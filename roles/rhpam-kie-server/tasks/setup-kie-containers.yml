@@ -1,6 +1,0 @@
----
-- name: Create {{ org_kie_server_id }}.xml state file
-  template:
-    src: kieserver.xml.j2
-    dest: "{{ org_kie_server_repo }}/{{ org_kie_server_id }}.xml"
-  when: rhpam_kie_server_kie_containers is defined

@@ -7,7 +7,7 @@
 
 - import_tasks: setup.yml
 
-- import_tasks: scripts.yml
+- import_tasks: users.yml
 
 - debug:
     msg:

@@ -4,15 +4,16 @@
     path: "{{ jboss_eap_tmp_dest }}"
     state: directory
 
-- name: Fail for Missing Red Hat Customer Portal Username
-  fail: msg="This role requires rhn_username to be set and non empty."
-  when: (rhn_username is not defined or rhn_username == '')
+# - name: Fail for Missing Red Hat Customer Portal Username
+#   fail: msg="This role requires rhn_username to be set and non empty."
+#   when: (rhn_username is not defined or rhn_username == '')
 
-- name: Fail for Missing Red Hat Customer Portal Password
-  fail: msg="This role requires rhn_password to be set and non empty."
-  when: (rhn_password is not defined or rhn_password == '')
+# - name: Fail for Missing Red Hat Customer Portal Password
+#   fail: msg="This role requires rhn_password to be set and non empty."
+#   when: (rhn_password is not defined or rhn_password == '')
 
 - name: Install redhat_csp_download required python package.
+  become: yes
   pip:
     name:
       - requests
@@ -25,8 +26,18 @@
     dest: "{{jboss_eap_tmp_dest}}/{{jboss_eap_package_name}}"
     username: "{{rhn_username}}"
     password: "{{rhn_password}}"
+  async: 7200
+  poll: 0
+  register: csp_eap_download
   vars:
     ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
+
+- name: Check On JBoss EAP download completion ...
+  async_status: jid={{ csp_eap_download.ansible_job_id }}
+  register: job_result_csp_eap_download
+  until: job_result_csp_eap_download.finished
+  retries: 600
+  delay: 10
 
 - name: Downloading JBoss EAP patch into {{jboss_eap_tmp_dest}} from Red Hat Customer Portal ...
   redhat_csp_download:
@@ -34,6 +45,16 @@
     dest: "{{jboss_eap_tmp_dest}}/{{jboss_eap_patch_package_name}}"
     username: "{{rhn_username}}"
     password: "{{rhn_password}}"
+  async: 7200
+  poll: 0
+  register: csp_eap_patch_download
   vars:
     ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
   when: jboss_eap_patch_package_name is defined
+
+- name: Check On JBoss EAP patch download completion ...
+  async_status: jid={{ csp_eap_patch_download.ansible_job_id }}
+  register: job_result_csp_eap_patch_download
+  until: job_result_csp_eap_patch_download.finished
+  retries: 600
+  delay: 10

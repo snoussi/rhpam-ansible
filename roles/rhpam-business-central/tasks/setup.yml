@@ -10,7 +10,7 @@
     src: setup-basic-props.cli.j2
     dest: "{{ rhpam_business_central_tmp_dest }}/setup-basic-props.cli"
 
-- name: Run setup-basic-props.cli JBoss configuration
+- name: Run setup-basic-props.cli to add Business Central basic configurations
   command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh --file={{ rhpam_business_central_tmp_dest }}/setup-basic-props.cli"
 
 # Custom maven config
@@ -24,7 +24,7 @@
     src: setup-maven-props.cli.j2
     dest: "{{ rhpam_business_central_tmp_dest }}/bc-setup-maven-props.cli"
 
-- name: Run bc-setup-maven-props.cli JBoss configuration
+- name: Run bc-setup-maven-props.cli to add custom maven configuration
   command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh --file={{ rhpam_business_central_tmp_dest }}/bc-setup-maven-props.cli"
 
 # SSH keys necessary to git clone (import projects) and push via SSH.
@@ -40,4 +40,58 @@
     pubkey: "{{ openssh_keypair.public_key }}"
   delegate_to: localhost
   when: github_access_token is defined
-# Git hook required steps below, knows_hosts needed for the 'git push'.
+
+# Add & configure Red Hat Single Sign-On OIDC Adapter
+- name: Downloading Red Hat Single Sign-On Client Adapter for JBoss EAP 7 into {{rhpam_business_central_tmp_dest}} from Red Hat Customer Portal, please wait ...
+  redhat_csp_download:
+    url: "{{redhat_sso_oidc_eap_adapter_package_source}}"
+    dest: "{{rhpam_business_central_tmp_dest}}/{{redhat_sso_oidc_eap_adapter_package_name}}"
+    username: "{{rhn_username}}"
+    password: "{{rhn_password}}"
+  vars:
+    ansible_python_interpreter: "{{ansible_python_interpreter_path}}"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Extract Red Hat Single Sign-On Client Adapter for JBoss EAP 7 into {{ rhpam_business_central_home }}
+  unarchive:
+    src: "{{ rhpam_business_central_tmp_dest }}/{{redhat_sso_oidc_eap_adapter_package_name}}"
+    dest: "{{ rhpam_business_central_home }}"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Configure Red Hat Single Sign-On Client Adapter for JBoss EAP 7
+  command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh -Dserver.config=standalone-full.xml --file={{ rhpam_business_central_home }}/bin/adapter-elytron-install-offline.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+  tags:
+    - sso
+
+- name: Create bc-setup-sso-props.cli
+  template:
+    src: setup-sso-props.cli.j2
+    dest: "{{ rhpam_business_central_tmp_dest }}/bc-setup-sso-props.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Run bc-setup-sso-props.cli to add Business Central rh-sso configuration
+  command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh --file={{ rhpam_business_central_tmp_dest }}/bc-setup-sso-props.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Create kie-git.json
+  template:
+    src: kie-git.json.j2
+    dest: "{{ rhpam_business_central_tmp_dest }}/kie-git.json"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Copy kie-git.json to {{ rhpam_business_central_home }}
+  command:
+    cmd: "cp -rf {{ rhpam_business_central_tmp_dest }}/kie-git.json {{ rhpam_business_central_home }}"
+    creates: "{{ rhpam_business_central_home }}/kie-git.json"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Create bc-setup-sso-client.cli
+  template:
+    src: setup-sso-client.cli.j2
+    dest: "{{ rhpam_business_central_tmp_dest }}/bc-setup-sso-client.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined
+
+- name: Run bc-setup-sso-client.cli to add rh-sso client configuration
+  command: "{{ rhpam_business_central_home }}/bin/jboss-cli.sh --file={{ rhpam_business_central_tmp_dest }}/bc-setup-sso-client.cli"
+  when: use_redhat_sso_oidc_eap_adapter is defined

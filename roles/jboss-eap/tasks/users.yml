@@ -1,0 +1,3 @@
+---
+- name: Add a default admin user on EAP
+  command: "{{ jboss_eap_home }}/bin/add-user.sh -u {{eap_admin_user}} -p {{eap_admin_pwd}} -g 'admin' --silent"

@@ -18,7 +18,19 @@ Business Central and Kie Server on the same host with a managed Kie Server runti
 ![Sandbox setup](docs/sandbox.png)
 
 ```
-ansible-playbook -i hosts pam-sandbox.yml
+ansible-playbook -i hosts pam-sandbox.yml --ask-become-pass
+```
+
+to skip host envirement check, run
+
+```
+ansible-playbook -i hosts pam-sandbox.yml  --ask-become-pass --skip-tags "os_env"
+```
+
+to skip the EAP tasks, run
+
+```
+ansible-playbook -i hosts pam-sandbox.yml  --ask-become-pass --skip-tags "eap"
 ```
 
 ## Kudos & Inspirations
