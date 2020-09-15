@@ -4,13 +4,13 @@ jboss_eap_patch_package_source: https://access.redhat.com/jbossnetwork/restricte
 jboss_eap_patch_package_name: jboss-eap-7.3.1-patch.zip
 jboss_eap: jboss-eap-7.3
 
-rhpam_business_central_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=85631
-rhpam_business_central_package_name: rhpam-7.8.0-business-central-eap7-deployable.zip
-rhpam_business_central: rhpam-7.8.0
+rhpam_business_central_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=87401
+rhpam_business_central_package_name: rhpam-7.8.1-business-central-eap7-deployable.zip
+rhpam_business_central: rhpam-7.8.1
 
-rhpam_kie_server_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=85641
-rhpam_kie_server_package_name: rhpam-7.8.0-kie-server-ee8.zip
-rhpam_kie_server: rhpam-7.8.0
+rhpam_kie_server_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=87411
+rhpam_kie_server_package_name: rhpam-7.8.1-kie-server-ee8.zip
+rhpam_kie_server: rhpam-7.8.1
 
 redhat_sso_package_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=64611
 redhat_sso_package_name: rh-sso-7.3.0.GA.zip
